@@ -1,2 +1,7 @@
 name: transit
+version: 0.8.0
+author: Marián Horňák
 description: Transit for Dart
+homepage: https://github.com/syslo/transit-dart
+dev_dependencies:
+  unittest: any
