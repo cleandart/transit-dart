@@ -33,12 +33,12 @@ abstract class AbstractMarshaler{
   }
   
   emitArray(List l, asMapKey){
-    if(asMapKey) throw new ArgumentError("Array is a key");
+    if(asMapKey && forceStringKey) throw new ArgumentError("Array is a key");
     return new List.from(l.map((obj)=>this.marshal(obj,false)));
   }
   
   emitMap(Map m, asMapKey){
-    if(asMapKey) throw new ArgumentError("Map is a key");
+    if(asMapKey && forceStringKey) throw new ArgumentError("Map is a key");
     var result = {};
     m.forEach((key,value){
       result[this.marshal(key,true)] = 
@@ -73,10 +73,11 @@ abstract class AbstractMarshaler{
   
   emitBoolean(bool b, asMapKey) => b;
   
-  emitBytes(bool obj, asMapKey) => obj;
+  emitBytes(obj, asMapKey) => "~b${CryptoUtils.bytesToBase64(obj)}";
   
   emitTagged(tag, rep, asMapKey){
-    if (asMapKey) throw new ArgumentError("Composed tag is a key");
+    if(asMapKey && forceStringKey)
+      throw new ArgumentError("Composed tag is a key");
     return [emitString("~#${tag}", asMapKey),
       marshal(rep, false)];
   }
@@ -137,7 +138,6 @@ abstract class AbstractJsonMarshaler extends AbstractMarshaler {
   
   emitBoolean(bool b, asMapKey) => asMapKey ? "~?${b?'t':'f'}" : b;
   
-  emitBytes(bool obj, asMapKey) => asMapKey ? obj.toString() : obj;
 }
 
 class MsgPackMarshaler extends AbstractMarshaler {

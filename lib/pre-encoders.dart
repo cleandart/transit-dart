@@ -43,21 +43,21 @@ class _OneChunkTransformer extends ChunkedConversionSink<Object> {
 class MsgPackPreEncoder extends PreEncoder{
   
   final MsgPackMarshaler marshaler =
-      new MsgPackMarshaler(new WriteHandlers.built_in());
+      new MsgPackMarshaler(new WriteHandlers.built_in_msgPack());
 
 }
 
 class JsonPreEncoder extends PreEncoder{
   
   final JsonMarshaler marshaler =
-      new JsonMarshaler(new WriteHandlers.built_in());
+      new JsonMarshaler(new WriteHandlers.built_in_json());
 
 }
 
 class VerboseJsonPreEncoder extends PreEncoder{
   
   final VerboseJsonMarshaler marshaler =
-      new VerboseJsonMarshaler(new WriteHandlers.built_in());
+      new VerboseJsonMarshaler(new WriteHandlers.built_in_json());
 
 }
 

@@ -8,19 +8,28 @@ testEncoding() => group("Encoding", () {
   
   group("MsgPack", () { for(var row in DATA){
     test(row[0].toString(), () {
-      expect(MSGPACK.convert(row[0]),equals(row[1]));
+      expect(
+          MSGPACK.convert(row[0]).toString(),
+          equals(row[1].toString())
+      );
     });
   }});
     
   group("JSON", () { for(var row in DATA){
     test(row[0].toString(), () {
-      expect(JSON.convert(row[0]),equals(row[2]));
+      expect(
+          JSON.convert(row[0]).toString(),
+          equals(row[2].toString())
+      );
     });
   }});
   
   group("verbose-JSON", () { for(var row in DATA){
     test(row[0].toString(), () {
-      expect(VERBOSE_JSON.convert(row[0]),equals(row[3]));
+      expect(
+          VERBOSE_JSON.convert(row[0]).toString(),
+          equals(row[3].toString())
+      );
     });
   }});
     

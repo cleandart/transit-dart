@@ -14,7 +14,8 @@ final DATA = [
   [[4.2], ["~f4.2"], ["~f4.2"], ["~f4.2"]],
   [[true], [true], [true], [true]],
   [[new Keyword("K")], ["~:K"], ["~:K"], ["~:K"]],
-  //[[new Symbol("S")], ["~\$S"], ["~\$S"], ["~\$S"]],
+  [[new TSymbol("S")], ["~\$S"], ["~\$S"], ["~\$S"]],
+  [[new Bytes("Win".codeUnits)], ["~bV2lu"], ["~bV2lu"], ["~bV2lu"]],
   ["pure", ["~#'","pure"], ["~#'","pure"], {"~#'":"pure"} ],
   [[],[],[],[]],
   [[1,2,3], [1,2,3], [1,2,3], [1,2,3]],
@@ -28,6 +29,12 @@ final DATA = [
   [new TaggedValue("map",{null:0}), {null:0}, ["^ ",null,0], {"~_":0}],
   [new TaggedValue("map",{1:0}), {1:0}, ["^ ",1,0], {"~i1":0}],
   [
+   [new Uuid.parse("01234567-89ab-cdef-0123-456789abcdef")],
+   [["~#u", [81985529216486895, 81985529216486895]]],
+   ["~u01234567-89ab-cdef-0123-456789abcdef"], 
+   ["~u01234567-89ab-cdef-0123-456789abcdef"],
+  ],
+  [
     new Link(Uri.parse("http:www.a.com"),"b","c"),
     ["~#link", {"href": "~rhttp:www.a.com", "rel": "b", "name": "c"}],
     ["~#link", ["^ ", "href", "~rhttp:www.a.com", "rel", "b", "name", "c"]],
@@ -36,15 +43,28 @@ final DATA = [
   [
     [new DateTime(2047)],
     [["~#m", new DateTime(2047).millisecondsSinceEpoch]],
-    [["~#m", new DateTime(2047).millisecondsSinceEpoch]],
+    ["~m${new DateTime(2047).millisecondsSinceEpoch}"],
     ["~t${new DateTime(2047).toIso8601String()}"],     
   ],
   [
     {new DateTime(2047) : 0},
     ["~#cmap", [["~#m", new DateTime(2047).millisecondsSinceEpoch], 0]],
-    ["~#cmap", [["~#m", new DateTime(2047).millisecondsSinceEpoch], 0]],
+    ["~#cmap", ["~m${new DateTime(2047).millisecondsSinceEpoch}", 0]],
     {"~#cmap":["~t${new DateTime(2047).toIso8601String()}", 0]},     
   ], 
+  [
+    new TaggedValue("map",{new DateTime(2047) : 0}),
+    {["~#m", new DateTime(2047).millisecondsSinceEpoch]: 0},
+    ["^ ", "~m${new DateTime(2047).millisecondsSinceEpoch}" , 0],
+    {"~t${new DateTime(2047).toIso8601String()}": 0},     
+  ],  
+  [
+    new TaggedValue("map",
+        {new Uuid.parse("01234567-89ab-cdef-0123-456789abcdef") : 0}),
+    {["~#u", [81985529216486895, 81985529216486895]]: 0},
+    ["^ ", "~u01234567-89ab-cdef-0123-456789abcdef", 0],
+    {"~u01234567-89ab-cdef-0123-456789abcdef": 0},     
+  ],  
   [
     [null,true,{2:[3,new TaggedValue("4",5)]}],
     [null,true,["~#cmap",[2,[3,["~#4",5]]]]],

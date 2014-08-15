@@ -65,28 +65,6 @@ class IntWriteHandler extends WriteHandler<int> {
   String string_rep(int i) => i.toString();
 }
 
-class KeywordWriteHandler extends WriteHandler<Keyword> {
-
-  const KeywordWriteHandler();
-  
-  String tag(Keyword k) => ':';
-
-  rep(Keyword k) => k.toString();
-
-  String string_rep(Keyword k) => k.toString();
-}
-
-class SymbolWriteHandler extends WriteHandler<Symbol> {
-
-  const SymbolWriteHandler();
-  
-  String tag(Symbol s) => '\$';
-
-  rep(Symbol s) => s.toString();
-
-  String string_rep(Symbol s) => s.toString();
-}
-
 class FloatWriteHandler extends WriteHandler<double> {
 
   const FloatWriteHandler();
@@ -98,26 +76,29 @@ class FloatWriteHandler extends WriteHandler<double> {
   String string_rep(f) => f.toString();
 }
 
-class TimestampWriteHandler extends WriteHandler<DateTime> {
+abstract class TimestampWriteHandler extends WriteHandler<DateTime> {
 
   const TimestampWriteHandler();
     
   String tag(DateTime d) => "m";
-
-  rep(DateTime d) => d.toUtc().millisecondsSinceEpoch;
-  
-  String string_rep(DateTime d) => null;
   
   WriteHandler verbose_handler(){
       return const TimestringWriteHandler();
   }
 }
 
-class TimestampWriteHandlerJSON extends TimestampWriteHandler {
+class JsonTimestampWriteHandler extends TimestampWriteHandler {
 
-  const TimestampWriteHandlerJSON();
+  const JsonTimestampWriteHandler();
     
   rep(DateTime d) => d.toUtc().millisecondsSinceEpoch.toString();
+}
+
+class MsgPackTimestampWriteHandler extends TimestampWriteHandler {
+
+  const MsgPackTimestampWriteHandler();
+    
+  rep(DateTime d) => d.toUtc().millisecondsSinceEpoch;
 }
 
 class TimestringWriteHandler extends WriteHandler<DateTime> {
@@ -140,6 +121,29 @@ class UriWriteHandler extends WriteHandler<Uri> {
   rep(Uri u) => u.toString();
 
   String string_rep(Uri u) => u.toString();
+}
+
+abstract class UuidWriteHandler extends WriteHandler<Uuid> {
+
+  const UuidWriteHandler();
+    
+  String tag(Uuid u) => "u";
+
+  String string_rep(Uuid u) => u.toString();
+}
+
+class JsonUuidWriteHandler extends UuidWriteHandler {
+  
+  const JsonUuidWriteHandler();
+  
+  rep(Uuid u) => u.toString();
+}
+
+class MsgPackUuidWriteHandler extends UuidWriteHandler {
+  
+  const MsgPackUuidWriteHandler();
+  
+  rep(Uuid u) => [u.hi,u.lo];
 }
 
 class ArrayWriteHandler extends WriteHandler<List> {
@@ -238,28 +242,42 @@ class WriteHandlers extends Object {
     throw new NotTransitableObjectError(o);
   }
   
-  WriteHandlers():
-    data = {};
+  WriteHandlers(): data = {};
   
-  WriteHandlers.built_in():
-    data = new Map.from(_BUILT_IN_INITIALIZER);
-  
-  static final Map<Type, WriteHandler> _BUILT_IN_INITIALIZER = {
-     List: const ArrayWriteHandler(),
-     Map: const MapWriteHandler(),
-     String: const StringWriteHandler(),
-     int: const IntWriteHandler(),
-     TaggedValue: const TaggedValueWriteHandler(),
-     double: const FloatWriteHandler(),
-     bool: const BooleanWriteHandler(),
-     Null: const NullWriteHandler(),
-     Keyword: const KeywordWriteHandler(),
-     Symbol: const SymbolWriteHandler(),
-     DateTime: const TimestampWriteHandler(),
-     Uri: const UriWriteHandler(),
-     Set: const SetWriteHandler(),
-     LinkedList: const LinkedListWriteHandler(),
-     Link: const LinkWriteHandler(),
+  WriteHandlers.built_in_json(): data = new Map.from(_BUILTINS){
+    data.addAll(_BUILTINS_JSON);
+  }
+      
+  WriteHandlers.built_in_msgPack(): data = new Map.from(_BUILTINS){
+    data.addAll(_BUILTINS_MSGPACK);
+  }
+    
+  static final Map<Type, WriteHandler> _BUILTINS = {
+    List: const ArrayWriteHandler(),
+    Map: const MapWriteHandler(),
+    TaggedValue: const TaggedValueWriteHandler(),
+    String: const StringWriteHandler(),
+    int: const IntWriteHandler(),
+    double: const FloatWriteHandler(),
+    bool: const BooleanWriteHandler(),
+    Null: const NullWriteHandler(),
+    Uri: const UriWriteHandler(),
+    Set: const SetWriteHandler(),
+    LinkedList: const LinkedListWriteHandler(),
+    Link: const LinkWriteHandler(),
   };
+  
+  static final Map<Type, WriteHandler> _BUILTINS_JSON = {
+    DateTime: const JsonTimestampWriteHandler(),
+    Uuid: const JsonUuidWriteHandler(),                                                    
+  };
+    
+  static final Map<Type, WriteHandler> _BUILTINS_MSGPACK = {
+    DateTime: const MsgPackTimestampWriteHandler(),
+    Uuid: const MsgPackUuidWriteHandler(),                                                    
+  };
+    
+    
+  
 }
 
