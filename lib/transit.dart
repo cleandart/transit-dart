@@ -13,3 +13,4 @@ part "marshalers.dart";
 part "pre-encoders.dart";
 part "codecs.dart";
 part "msgpack.dart";
+part "helpers.dart";
