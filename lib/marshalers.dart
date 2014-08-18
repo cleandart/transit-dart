@@ -50,10 +50,7 @@ abstract class AbstractMarshaler{
   emitQuoted(obj, asMapKey) => emitTagged("'",obj, asMapKey);
   
   emitString(String s, asMapKey){
-    if (
-      asMapKey || 
-      (s.length > 1 && ['~#','~\$','~:'].contains(s.substring(0,2)))
-    )
+    if (asMapKey || _isCacheable(s))
       return cache.convert(s);
     else
       return s; 

@@ -22,3 +22,7 @@ class _OneChunkTransformer extends ChunkedConversionSink<Object> {
   }
 
 }
+
+bool _isCacheable(s){
+  return s.length > 1 && ['~#','~\$','~:'].contains(s.substring(0,2));
+}

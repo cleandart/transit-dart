@@ -1,5 +1,12 @@
 part of transit;
 
+class Tag{
+  
+  final String tag;
+  const Tag(this.tag);
+  
+}
+
 class TaggedValue<T>{
   
   final String tag;
