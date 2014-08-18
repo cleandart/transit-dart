@@ -164,13 +164,13 @@ class SetWriteHandler extends WriteHandler<Set> {
   rep(Set s) => s.toList(growable: false);
 }
 
-class LinkedListWriteHandler extends WriteHandler<LinkedList> {
+class QueueWriteHandler extends WriteHandler<Queue> {
 
-  const LinkedListWriteHandler();
+  const QueueWriteHandler();
     
-  String tag(LinkedList s) => "list";
+  String tag(Queue q) => "list";
 
-  rep(LinkedList s) => s.toList(growable: false);
+  rep(Queue q) => q.toList(growable: false);
 }
 
 class MapWriteHandler extends WriteHandler<Map> {
@@ -263,7 +263,7 @@ class WriteHandlers extends Object {
     Null: const NullWriteHandler(),
     Uri: const UriWriteHandler(),
     Set: const SetWriteHandler(),
-    LinkedList: const LinkedListWriteHandler(),
+    Queue: const QueueWriteHandler(),
     Link: const LinkWriteHandler(),
   };
   

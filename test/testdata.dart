@@ -23,7 +23,7 @@ final DATA = [
   [{}, ['~#cmap', []], ['~#cmap', []], {'~#cmap': []}],
   [{[]:0}, ['~#cmap', [[],0]], ['~#cmap', [[],0]], {'~#cmap': [[],0]}],
   [new Set.from([1,2]), ['~#set', [1,2]], ['~#set', [1,2]], {'~#set': [1,2]}],
-  [new LinkedList(), ['~#list', []], ['~#list', []], {'~#list': []}],
+  [new Queue(), ['~#list', []], ['~#list', []], {'~#list': []}],
   [new TaggedValue("tg",2), ['~#tg', 2], ['~#tg', 2], {'~#tg': 2}],
   [new TaggedValue("map",{true:0}), {true:0}, ["^ ",true ,0], {"~?t":0}],
   [new TaggedValue("map",{null:0}), {null:0}, ["^ ",null,0], {"~_":0}],

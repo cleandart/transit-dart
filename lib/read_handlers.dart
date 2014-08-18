@@ -103,7 +103,7 @@ final Map<String, ReadHandler> standardReadHandlers = {
   },
    
   "list": (o){
-    if(o is List) return new LinkedList()..addAll(o);
+    if(o is List) return new Queue.from(o);
     return null;
   },
    
