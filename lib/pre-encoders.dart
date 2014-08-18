@@ -2,14 +2,15 @@ part of transit;
 
 abstract class PreEncoder extends Converter {
 
-  AbstractMarshaler get marshaler;
+  AbstractPreEncoding newEncoding();
+  WriteHandlers get handlers;
 
   convert(obj) {
-    return marshaler.marshalTop(obj);
+    return newEncoding().encodeTop(obj);
   }
 
   register(WriteHandler h) {
-    marshaler.register(h);
+    handlers.register(h);
   }
 
   Sink startChunkedConversion(Sink s) {
@@ -19,22 +20,28 @@ abstract class PreEncoder extends Converter {
 
 class MsgPackPreEncoder extends PreEncoder{
   
-  final MsgPackMarshaler marshaler =
-      new MsgPackMarshaler(new WriteHandlers.built_in_msgPack());
+  final WriteHandlers handlers = new WriteHandlers.built_in_msgPack();
+      
+  newEncoding() =>
+      new MsgPackPreEncoding(handlers);
 
 }
 
 class JsonPreEncoder extends PreEncoder{
   
-  final JsonMarshaler marshaler =
-      new JsonMarshaler(new WriteHandlers.built_in_json());
+  final WriteHandlers handlers = new WriteHandlers.built_in_json();
+  
+  newEncoding() =>
+      new JsonPreEncoding(handlers);
 
 }
 
 class VerboseJsonPreEncoder extends PreEncoder{
   
-  final VerboseJsonMarshaler marshaler =
-      new VerboseJsonMarshaler(new WriteHandlers.built_in_json());
+  final WriteHandlers handlers = new WriteHandlers.built_in_json();
+  
+  newEncoding() =>
+      new VerboseJsonPreEncoding(handlers);
 
 }
 

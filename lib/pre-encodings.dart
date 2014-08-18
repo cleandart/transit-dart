@@ -2,20 +2,16 @@ part of transit;
 
 
 
-abstract class AbstractMarshaler{
+abstract class AbstractPreEncoding{
   
   final WriteHandlers handlers;
   final bool forceStringKey = false;
+  final CacheLogicEncoder cache;
   
-  CacheLogicEncoder cache;
   var groundEmiters;
   
-  AbstractMarshaler(this.handlers){
+  AbstractPreEncoding(this.handlers): cache = new CacheLogicEncoder(){
     initEmiters();
-  }
-  
-  register(WriteHandler h){
-    handlers.register(h);
   }
   
   initEmiters() {
@@ -34,15 +30,15 @@ abstract class AbstractMarshaler{
   
   emitArray(List l, asMapKey){
     if(asMapKey && forceStringKey) throw new ArgumentError("Array is a key");
-    return new List.from(l.map((obj)=>this.marshal(obj,false)));
+    return new List.from(l.map((obj)=>this.encode(obj,false)));
   }
   
   emitMap(Map m, asMapKey){
     if(asMapKey && forceStringKey) throw new ArgumentError("Map is a key");
     var result = {};
     m.forEach((key,value){
-      result[this.marshal(key,true)] = 
-          this.marshal(value,false);
+      result[this.encode(key,true)] = 
+          this.encode(value,false);
     });
     return result;
   }
@@ -76,18 +72,17 @@ abstract class AbstractMarshaler{
     if(asMapKey && forceStringKey)
       throw new ArgumentError("Composed tag is a key");
     return [emitString("~#${tag}", asMapKey),
-      marshal(rep, false)];
+      encode(rep, false)];
   }
   
-  marshalTop(obj){
-    cache = new CacheLogicEncoder();
+  encodeTop(obj){
     WriteHandler handler = handlers.resolve(obj);
     String tag = handler.tag(obj);
     if(tag.length == 1) return emitQuoted(obj, false);
-    else return marshal(obj, false);
+    else return encode(obj, false);
   }
   
-  marshal(obj, asMapKey){
+  encode(obj, asMapKey){
     WriteHandler handler = handlers.resolve(obj);
     String tag = handler.tag(obj);
     
@@ -117,11 +112,11 @@ abstract class AbstractMarshaler{
   
 }
 
-abstract class AbstractJsonMarshaler extends AbstractMarshaler {
+abstract class AbstractJsonPreEncoding extends AbstractPreEncoding {
   
   final bool forceStringKey = true;
   
-  AbstractJsonMarshaler(WriteHandlers h): super(h);
+  AbstractJsonPreEncoding(WriteHandlers h): super(h);
   
   emitInt(int i, asMapKey){
     if(asMapKey || i != i.toSigned(53))
@@ -137,42 +132,38 @@ abstract class AbstractJsonMarshaler extends AbstractMarshaler {
   
 }
 
-class MsgPackMarshaler extends AbstractMarshaler {
+class MsgPackPreEncoding extends AbstractPreEncoding {
   
-  MsgPackMarshaler(WriteHandlers h): super(h);
+  MsgPackPreEncoding(WriteHandlers h): super(h);
 }
 
-class JsonMarshaler extends AbstractJsonMarshaler {
+class JsonPreEncoding extends AbstractJsonPreEncoding {
   
-  JsonMarshaler(WriteHandlers h): super(h);
+  JsonPreEncoding(WriteHandlers h): super(h);
   
   emitMap(Map m, asMapKey){
     if(asMapKey) throw new ArgumentError("Map is a key");
     var result = ["^ "];
     m.forEach((key,value){
-      result.add(this.marshal(key,false));
-      result.add(this.marshal(value,false));
+      result.add(this.encode(key,false));
+      result.add(this.encode(value,false));
     });
     return result;
   }
 }
 
-class VerboseJsonMarshaler extends AbstractJsonMarshaler {
+class VerboseJsonPreEncoding extends AbstractJsonPreEncoding {
   
-  VerboseJsonMarshaler(WriteHandlers h): super(h){
+  VerboseJsonPreEncoding(WriteHandlers h): super(h){
     handlers.data.forEach((Type key, WriteHandler value) {
       handlers.data[key] = value.verbose_handler();
     });
   }
   
-  register(WriteHandler h){
-      handlers.register(h.verbose_handler());
-  }
-  
   emitTagged(tag, rep, asMapKey){
     if (asMapKey) throw new ArgumentError("Composed tag is a key");
     return {emitString("~#${tag}", asMapKey):
-      marshal(rep, false)};
+      encode(rep, false)};
     }
   
   emitString(String s, asMapKey){

@@ -9,7 +9,7 @@ import "package:crypto/crypto.dart";
 part "types.dart";
 part "cache.dart";
 part "write_handlers.dart";
-part "marshalers.dart";
+part "pre-encodings.dart";
 part "pre-encoders.dart";
 part "codecs.dart";
 part "msgpack.dart";
