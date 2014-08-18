@@ -17,7 +17,6 @@ class TaggedValue<T>{
   String toString() => "#${tag} ${rep}";
   
   bool operator == (TaggedValue<T> that){
-    print(this.rep == that.rep);
     return this.tag == that.tag && this.rep == that.rep;
   }
   
