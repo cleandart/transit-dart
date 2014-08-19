@@ -145,7 +145,7 @@ class _JsonPreEncoding extends _AbstractJsonPreEncoding {
     if(asMapKey) throw new ArgumentError("Map is a key");
     var result = ["^ "];
     m.forEach((key,value){
-      result.add(this.encode(key,false));
+      result.add(this.encode(key,true));
       result.add(this.encode(value,false));
     });
     return result;
