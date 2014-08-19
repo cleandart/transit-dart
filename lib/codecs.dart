@@ -44,7 +44,7 @@ abstract class TransitDecoder<S,T> extends Converter<S,T>{
   /**
    * Provides Transit part of conversion
    */
-  PreEncoder get postDecoder;
+  PostDecoder get postDecoder;
   
   /**
    * Provides deserializating part of conversion
@@ -65,7 +65,7 @@ abstract class TransitDecoder<S,T> extends Converter<S,T>{
    * Registers [h] to be used for decoding [tag]
    * by [postDecoder].
    */
-  register(WriteHandler h) => postDecoder.register(h);
+  register(String tag, ReadHandler h) => postDecoder.register(tag,h);
 }
 
 /**
