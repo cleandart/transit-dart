@@ -2,7 +2,7 @@ part of transit;
 
 typedef T ReadHandler<T>(dynamic);
 
-final Map<String, ReadHandler> standardReadHandlers = {
+final Map<String, ReadHandler> _standardReadHandlers = {
                                          
   "_": (_) => null,
       
@@ -43,13 +43,13 @@ final Map<String, ReadHandler> standardReadHandlers = {
   
   "b": (o){
     if(o is String)
-      return new Bytes(CryptoUtils.base64StringToBytes(o));
+      return new TransitBytes(CryptoUtils.base64StringToBytes(o));
     return null;
   },
   
-  ":": (o) => new Keyword(o.toString()),
+  ":": (o) => new TransitKeyword(o.toString()),
   
-  "\$": (o) => new TSymbol(o.toString()),
+  "\$": (o) => new TransitSymbol(o.toString()),
   
   "m": (o){
     if(o is int) return new DateTime.fromMillisecondsSinceEpoch(o);
@@ -64,9 +64,9 @@ final Map<String, ReadHandler> standardReadHandlers = {
   },
     
   "u": (o){
-    if(o is String) return new Uuid.parse(o);
+    if(o is String) return new TransitUuid.parse(o);
     if(o is List && o.length == 2 && o[0] is int && o[1] is int)
-      return new Uuid(o[0],o[1]);
+      return new TransitUuid(o[0],o[1]);
     return null;
    },
      
@@ -113,20 +113,20 @@ final Map<String, ReadHandler> standardReadHandlers = {
   },
   
   "link": (o){
-    //try {
-      Link l = new Link(
+    try {
+      TransitLink l = new TransitLink(
           o["href"],
           o["rel"],
           o["name"]
       );
       if(o.containsKey("render"))
-        l.render = LinkRenderType.ALL[o["render"]];
+        l.render = TransitLinkRenderType.ALL[o["render"]];
       if(o.containsKey("prompt"))
         l.prompt = o["prompt"];
       return l;
-    /*} catch(e) {
+    } catch(e) {
       return null;
-    }*/
+    }
       
   },
    

@@ -17,18 +17,18 @@ abstract class WriteHandler<T>{
   Type _type( ) => T;
 }
 
-class NullWriteHandler extends WriteHandler<Null> {
+class _NullWriteHandler extends WriteHandler<Null> {
 
-  const NullWriteHandler();
+  const _NullWriteHandler();
   
   String tag(Null n) => "_";
 
   rep(Null n) => null;
 }
 
-class StringWriteHandler extends WriteHandler<String> {
+class _StringWriteHandler extends WriteHandler<String> {
 
-  const StringWriteHandler();
+  const _StringWriteHandler();
   
   String tag(String s) => 's';
 
@@ -37,9 +37,9 @@ class StringWriteHandler extends WriteHandler<String> {
   String string_rep(String s) => s;
 }
 
-class BooleanWriteHandler extends WriteHandler<bool> {
+class _BooleanWriteHandler extends WriteHandler<bool> {
 
-  const BooleanWriteHandler();
+  const _BooleanWriteHandler();
   
   String tag(bool obj) => '?';
 
@@ -48,9 +48,9 @@ class BooleanWriteHandler extends WriteHandler<bool> {
   String string_rep(bool b) => b?'t':'f';
 }
 
-class IntWriteHandler extends WriteHandler<int> {
+class _IntWriteHandler extends WriteHandler<int> {
   
-  const IntWriteHandler();
+  const _IntWriteHandler();
   
   String tag(int i) => i == i.toSigned(64) ? 'i' : 'n';
 
@@ -65,9 +65,9 @@ class IntWriteHandler extends WriteHandler<int> {
   String string_rep(int i) => i.toString();
 }
 
-class FloatWriteHandler extends WriteHandler<double> {
+class _FloatWriteHandler extends WriteHandler<double> {
 
-  const FloatWriteHandler();
+  const _FloatWriteHandler();
   
   String tag(obj) => "f";
   
@@ -76,34 +76,34 @@ class FloatWriteHandler extends WriteHandler<double> {
   String string_rep(f) => f.toString();
 }
 
-abstract class TimestampWriteHandler extends WriteHandler<DateTime> {
+abstract class _TimestampWriteHandler extends WriteHandler<DateTime> {
 
-  const TimestampWriteHandler();
+  const _TimestampWriteHandler();
     
   String tag(DateTime d) => "m";
   
   WriteHandler verbose_handler(){
-      return const TimestringWriteHandler();
+      return const _TimestringWriteHandler();
   }
 }
 
-class JsonTimestampWriteHandler extends TimestampWriteHandler {
+class _JsonTimestampWriteHandler extends _TimestampWriteHandler {
 
-  const JsonTimestampWriteHandler();
+  const _JsonTimestampWriteHandler();
     
   rep(DateTime d) => d.toUtc().millisecondsSinceEpoch.toString();
 }
 
-class MsgPackTimestampWriteHandler extends TimestampWriteHandler {
+class _MsgPackTimestampWriteHandler extends _TimestampWriteHandler {
 
-  const MsgPackTimestampWriteHandler();
+  const _MsgPackTimestampWriteHandler();
     
   rep(DateTime d) => d.toUtc().millisecondsSinceEpoch;
 }
 
-class TimestringWriteHandler extends WriteHandler<DateTime> {
+class _TimestringWriteHandler extends WriteHandler<DateTime> {
 
-  const TimestringWriteHandler();
+  const _TimestringWriteHandler();
   
   String tag(DateTime d) => "t";
 
@@ -112,9 +112,9 @@ class TimestringWriteHandler extends WriteHandler<DateTime> {
   String string_rep(DateTime d) => d.toIso8601String();
 }
 
-class UriWriteHandler extends WriteHandler<Uri> {
+class _UriWriteHandler extends WriteHandler<Uri> {
 
-  const UriWriteHandler();
+  const _UriWriteHandler();
     
   String tag(Uri u) => "r";
 
@@ -123,59 +123,59 @@ class UriWriteHandler extends WriteHandler<Uri> {
   String string_rep(Uri u) => u.toString();
 }
 
-abstract class UuidWriteHandler extends WriteHandler<Uuid> {
+abstract class _UuidWriteHandler extends WriteHandler<TransitUuid> {
 
-  const UuidWriteHandler();
+  const _UuidWriteHandler();
     
-  String tag(Uuid u) => "u";
+  String tag(TransitUuid u) => "u";
 
-  String string_rep(Uuid u) => u.toString();
+  String string_rep(TransitUuid u) => u.toString();
 }
 
-class JsonUuidWriteHandler extends UuidWriteHandler {
+class _JsonUuidWriteHandler extends _UuidWriteHandler {
   
-  const JsonUuidWriteHandler();
+  const _JsonUuidWriteHandler();
   
-  rep(Uuid u) => u.toString();
+  rep(TransitUuid u) => u.toString();
 }
 
-class MsgPackUuidWriteHandler extends UuidWriteHandler {
+class _MsgPackUuidWriteHandler extends _UuidWriteHandler {
   
-  const MsgPackUuidWriteHandler();
+  const _MsgPackUuidWriteHandler();
   
-  rep(Uuid u) => [u.hi,u.lo];
+  rep(TransitUuid u) => [u.hi,u.lo];
 }
 
-class ArrayWriteHandler extends WriteHandler<List> {
+class _ArrayWriteHandler extends WriteHandler<List> {
 
-  const ArrayWriteHandler();
+  const _ArrayWriteHandler();
     
   String tag(List a) => 'array';
 
   rep(List a) => a;
 }
 
-class SetWriteHandler extends WriteHandler<Set> {
+class _SetWriteHandler extends WriteHandler<Set> {
 
-  const SetWriteHandler();
+  const _SetWriteHandler();
     
   String tag(Set s) => "set";
 
   rep(Set s) => s.toList(growable: false);
 }
 
-class QueueWriteHandler extends WriteHandler<Queue> {
+class _QueueWriteHandler extends WriteHandler<Queue> {
 
-  const QueueWriteHandler();
+  const _QueueWriteHandler();
     
   String tag(Queue q) => "list";
 
   rep(Queue q) => q.toList(growable: false);
 }
 
-class MapWriteHandler extends WriteHandler<Map> {
+class _MapWriteHandler extends WriteHandler<Map> {
 
-  const MapWriteHandler();
+  const _MapWriteHandler();
     
   String tag(Map m) => 'cmap';
 
@@ -189,13 +189,13 @@ class MapWriteHandler extends WriteHandler<Map> {
   }
 }
 
-class LinkWriteHandler extends WriteHandler<Link> {
+class _LinkWriteHandler extends WriteHandler<TransitLink> {
 
-  const LinkWriteHandler();
+  const _LinkWriteHandler();
     
-  String tag(Link l) => "link";
+  String tag(TransitLink l) => "link";
 
-  rep(Link l){
+  rep(TransitLink l){
     var res = {
       "href": l.href,
       "rel": l.rel,
@@ -207,17 +207,17 @@ class LinkWriteHandler extends WriteHandler<Link> {
     if (l.prompt != null){
       res["prompt"] = l.prompt;
     }
-    return new TaggedValue("map", res);
+    return new TransitTaggedValue("map", res);
   }
 }
 
-class TaggedValueWriteHandler extends WriteHandler<TaggedValue> {
+class _TaggedValueWriteHandler extends WriteHandler<TransitTaggedValue> {
 
-  const TaggedValueWriteHandler();
+  const _TaggedValueWriteHandler();
     
-  String tag(TaggedValue t) => t.tag;
+  String tag(TransitTaggedValue t) => t.tag;
 
-  rep(TaggedValue t) => t.rep;
+  rep(TransitTaggedValue t) => t.rep;
 }
 
 class WriteHandlers extends Object {
@@ -253,28 +253,28 @@ class WriteHandlers extends Object {
   }
     
   static final Map<Type, WriteHandler> _BUILTINS = {
-    List: const ArrayWriteHandler(),
-    Map: const MapWriteHandler(),
-    TaggedValue: const TaggedValueWriteHandler(),
-    String: const StringWriteHandler(),
-    int: const IntWriteHandler(),
-    double: const FloatWriteHandler(),
-    bool: const BooleanWriteHandler(),
-    Null: const NullWriteHandler(),
-    Uri: const UriWriteHandler(),
-    Set: const SetWriteHandler(),
-    Queue: const QueueWriteHandler(),
-    Link: const LinkWriteHandler(),
+    List: const _ArrayWriteHandler(),
+    Map: const _MapWriteHandler(),
+    TransitTaggedValue: const _TaggedValueWriteHandler(),
+    String: const _StringWriteHandler(),
+    int: const _IntWriteHandler(),
+    double: const _FloatWriteHandler(),
+    bool: const _BooleanWriteHandler(),
+    Null: const _NullWriteHandler(),
+    Uri: const _UriWriteHandler(),
+    Set: const _SetWriteHandler(),
+    Queue: const _QueueWriteHandler(),
+    TransitLink: const _LinkWriteHandler(),
   };
   
   static final Map<Type, WriteHandler> _BUILTINS_JSON = {
-    DateTime: const JsonTimestampWriteHandler(),
-    Uuid: const JsonUuidWriteHandler(),                                                    
+    DateTime: const _JsonTimestampWriteHandler(),
+    TransitUuid: const _JsonUuidWriteHandler(),                                                    
   };
     
   static final Map<Type, WriteHandler> _BUILTINS_MSGPACK = {
-    DateTime: const MsgPackTimestampWriteHandler(),
-    Uuid: const MsgPackUuidWriteHandler(),                                                    
+    DateTime: const _MsgPackTimestampWriteHandler(),
+    TransitUuid: const _MsgPackUuidWriteHandler(),                                                    
   };
     
     

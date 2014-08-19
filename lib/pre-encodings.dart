@@ -2,7 +2,7 @@ part of transit;
 
 
 
-abstract class AbstractPreEncoding{
+abstract class _AbstractPreEncoding{
   
   final WriteHandlers handlers;
   final bool forceStringKey = false;
@@ -10,7 +10,7 @@ abstract class AbstractPreEncoding{
   
   var groundEmiters;
   
-  AbstractPreEncoding(this.handlers): cache = new CacheLogicEncoder(){
+  _AbstractPreEncoding(this.handlers): cache = new CacheLogicEncoder(){
     initEmiters();
   }
   
@@ -112,11 +112,11 @@ abstract class AbstractPreEncoding{
   
 }
 
-abstract class AbstractJsonPreEncoding extends AbstractPreEncoding {
+abstract class _AbstractJsonPreEncoding extends _AbstractPreEncoding {
   
   final bool forceStringKey = true;
   
-  AbstractJsonPreEncoding(WriteHandlers h): super(h);
+  _AbstractJsonPreEncoding(WriteHandlers h): super(h);
   
   emitInt(int i, asMapKey){
     if(asMapKey || i != i.toSigned(53))
@@ -132,14 +132,14 @@ abstract class AbstractJsonPreEncoding extends AbstractPreEncoding {
   
 }
 
-class MsgPackPreEncoding extends AbstractPreEncoding {
+class _MsgPackPreEncoding extends _AbstractPreEncoding {
   
-  MsgPackPreEncoding(WriteHandlers h): super(h);
+  _MsgPackPreEncoding(WriteHandlers h): super(h);
 }
 
-class JsonPreEncoding extends AbstractJsonPreEncoding {
+class _JsonPreEncoding extends _AbstractJsonPreEncoding {
   
-  JsonPreEncoding(WriteHandlers h): super(h);
+  _JsonPreEncoding(WriteHandlers h): super(h);
   
   emitMap(Map m, asMapKey){
     if(asMapKey) throw new ArgumentError("Map is a key");
@@ -152,9 +152,9 @@ class JsonPreEncoding extends AbstractJsonPreEncoding {
   }
 }
 
-class VerboseJsonPreEncoding extends AbstractJsonPreEncoding {
+class _VerboseJsonPreEncoding extends _AbstractJsonPreEncoding {
   
-  VerboseJsonPreEncoding(WriteHandlers h): super(h){
+  _VerboseJsonPreEncoding(WriteHandlers h): super(h){
     handlers.data.forEach((Type key, WriteHandler value) {
       handlers.data[key] = value.verbose_handler();
     });

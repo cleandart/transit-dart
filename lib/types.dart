@@ -1,47 +1,48 @@
 part of transit;
 
-class Tag{
+class TransitTag{
   
   final String tag;
-  const Tag(this.tag);
+  const TransitTag._(this.tag);
   
+  String toString() => "#${tag}";
 }
 
-class TaggedValue<T>{
+class TransitTaggedValue<T>{
   
   final String tag;
   final T rep;
   
-  const TaggedValue(this.tag, this.rep);
+  const TransitTaggedValue(this.tag, this.rep);
   
   String toString() => "#${tag} ${rep}";
   
-  bool operator == (TaggedValue<T> that){
+  bool operator == (TransitTaggedValue<T> that){
     return this.tag == that.tag && this.rep == that.rep;
   }
   
   int get hashCode => tag.hashCode ^ rep.hashCode;
 }
 
-class Keyword extends TaggedValue<String>{
+class TransitKeyword extends TransitTaggedValue<String>{
   
-  const Keyword(String key): super(":", key); 
+  const TransitKeyword(String key): super(":", key); 
 }
 
-class TSymbol extends TaggedValue<String>{
+class TransitSymbol extends TransitTaggedValue<String>{
   
-  const TSymbol(String val): super("\$", val); 
+  const TransitSymbol(String val): super("\$", val); 
 }
 
-class Bytes extends TaggedValue<List<int>>{
+class TransitBytes extends TransitTaggedValue<List<int>>{
   
-  const Bytes(List<int> data): super("b", data); 
+  const TransitBytes(List<int> data): super("b", data); 
 }
 
-class LinkRenderType{
+class TransitLinkRenderType{
   
-  static const LINK = const LinkRenderType._("link");
-  static const IMAGE = const LinkRenderType._("image");
+  static const LINK = const TransitLinkRenderType._("link");
+  static const IMAGE = const TransitLinkRenderType._("image");
   
   static final ALL = {
      "link": LINK,
@@ -50,25 +51,25 @@ class LinkRenderType{
   
   final name;
   
-  const LinkRenderType._(this.name);
+  const TransitLinkRenderType._(this.name);
   
   String toString() => name; 
 }
 
-class Link{
+class TransitLink{
   Uri href;
   String rel;
   String name;
   String prompt;
-  LinkRenderType render;
+  TransitLinkRenderType render;
   
-  Link(this.href, this.rel, this.name, {this.render: null, this.prompt: null});
+  TransitLink(this.href, this.rel, this.name, {this.render: null, this.prompt: null});
   
   String toString(){
     return "Link<${href}>";
   }
   
-  bool operator == (Link that) =>
+  bool operator == (TransitLink that) =>
     this.rel == that.rel &&
     this.href == that.href &&
     this.name == that.name &&
@@ -79,14 +80,14 @@ class Link{
     name.hashCode ^ render.hashCode ^ prompt.hashCode;
 }
 
-class Uuid{
+class TransitUuid{
   
   final int hi;
   final int lo;
   
-  const Uuid(this.hi, this.lo);
+  const TransitUuid(this.hi, this.lo);
   
-  factory Uuid.parse(String s){
+  factory TransitUuid.parse(String s){
       
       g(int i) => "([a-fA-F0-9]{${i}})";
       RegExp r = new RegExp("^${g(8)}-${g(4)}-${g(4)}-${g(4)}-${g(12)}\$");
@@ -98,7 +99,7 @@ class Uuid{
       var hi = v(1)*(1<<32) + v(2)*(1<<16) + v(3);
       var lo = v(4)*(1<<48) + v(5);
       
-      return new Uuid(hi, lo);
+      return new TransitUuid(hi, lo);
     }
     
   String toString(){

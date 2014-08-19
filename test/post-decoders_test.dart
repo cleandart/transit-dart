@@ -1,7 +1,7 @@
 part of test;
 
 _ignoreMapEnforcer(obj){
-  if(obj is TaggedValue && obj.tag == "map") return obj.rep;
+  if(obj is TransitTaggedValue && obj.tag == "map") return obj.rep;
   return obj;
 }
 

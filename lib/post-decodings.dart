@@ -1,11 +1,11 @@
 part of transit;
 
-class PostDecoding{
+class _PostDecoding{
   
   final Map<String, ReadHandler> handlers;
   final CacheLogicDecoder cache = new CacheLogicDecoder();
   
-  PostDecoding(this.handlers);
+  _PostDecoding(this.handlers);
   
   decodeTop(obj){
     return decode(obj, false);
@@ -34,7 +34,7 @@ class PostDecoding{
     
     List res = new List.from(l.map((obj)=>decode(obj, false)));
     
-    if(res.length == 2 && res[0] is Tag)
+    if(res.length == 2 && res[0] is TransitTag)
       return decodeTagged(res[1], res[0].tag);
     
     return res;
@@ -52,7 +52,7 @@ class PostDecoding{
     });
     
     var k = res.keys.first;
-    if(res.length == 1 && k is Tag)
+    if(res.length == 1 && k is TransitTag)
       return decodeTagged(res.values.first, k.tag);
     
     return res;
@@ -67,7 +67,7 @@ class PostDecoding{
     
     if(s[0] == "~"){
       
-      if(s[1] == "#") return new Tag(s.substring(2));
+      if(s[1] == "#") return new TransitTag._(s.substring(2));
       if(s[1] == "~" || s[1] == "^") return s.substring(1);   
       else return decodeTagged(s.substring(2), s[1]);
       
@@ -80,7 +80,7 @@ class PostDecoding{
     if(handlers.containsKey(tag)){
       return handlers[tag](obj);
     } else {
-      return new TaggedValue(tag, obj);
+      return new TransitTaggedValue(tag, obj);
     }
   }
     

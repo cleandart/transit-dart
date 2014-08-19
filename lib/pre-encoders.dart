@@ -2,11 +2,11 @@ part of transit;
 
 abstract class PreEncoder extends Converter {
 
-  AbstractPreEncoding newEncoding();
+  _AbstractPreEncoding _newEncoding();
   WriteHandlers get handlers;
 
   convert(obj) {
-    return newEncoding().encodeTop(obj);
+    return _newEncoding().encodeTop(obj);
   }
 
   register(WriteHandler h) {
@@ -22,8 +22,8 @@ class MsgPackPreEncoder extends PreEncoder{
   
   final WriteHandlers handlers = new WriteHandlers.built_in_msgPack();
       
-  newEncoding() =>
-      new MsgPackPreEncoding(handlers);
+  _newEncoding() =>
+      new _MsgPackPreEncoding(handlers);
 
 }
 
@@ -31,8 +31,8 @@ class JsonPreEncoder extends PreEncoder{
   
   final WriteHandlers handlers = new WriteHandlers.built_in_json();
   
-  newEncoding() =>
-      new JsonPreEncoding(handlers);
+  _newEncoding() =>
+      new _JsonPreEncoding(handlers);
 
 }
 
@@ -40,8 +40,8 @@ class VerboseJsonPreEncoder extends PreEncoder{
   
   final WriteHandlers handlers = new WriteHandlers.built_in_json();
   
-  newEncoding() =>
-      new VerboseJsonPreEncoding(handlers);
+  _newEncoding() =>
+      new _VerboseJsonPreEncoding(handlers);
 
 }
 

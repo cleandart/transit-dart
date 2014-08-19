@@ -4,10 +4,10 @@ const int _DIGITS = 44;
 const int _BASE = 48;
 const String _PREFIX = "^";
 
-const CACHE_CODING = const CacheCodingCodec();
+const _CACHE_CODING = const _CacheCodingCodec();
 
-class CacheCodingCodec {
-  const CacheCodingCodec ();
+class _CacheCodingCodec {
+  const _CacheCodingCodec ();
   
   String encode(int index) {
     int h = index ~/ _DIGITS + _BASE;
@@ -34,7 +34,7 @@ class CacheLogicDecoder extends Converter{
   
   String convert(String s){
     if(s[0] == _PREFIX){
-      return data[CACHE_CODING.decode(s)];
+      return data[_CACHE_CODING.decode(s)];
     }
     if (s.length > 3){
       data.add(s);
@@ -55,7 +55,7 @@ class CacheLogicEncoder extends Converter{
         return res;
       }
       if (counter < _DIGITS*_DIGITS) {
-        res = CACHE_CODING.encode(counter);
+        res = _CACHE_CODING.encode(counter);
         data[s] = res;
         counter++;
       }

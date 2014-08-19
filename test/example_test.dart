@@ -13,6 +13,7 @@ testExamples() => group("Examples", () {
     var data2 = codec.encode(obj2);
     expect(obj2.toString(), equals(obj1.toString()));
     expect(data2, equals(data1));
+    
   };
   
   Directory base = new Directory("../../transit-format/examples/0.8/");

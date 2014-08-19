@@ -3,10 +3,10 @@ part of transit;
 class PostDecoder extends Converter{
   
   final Map<String, ReadHandler> handlers =
-      new Map.from(standardReadHandlers);
+      new Map.from(_standardReadHandlers);
   
-  PostDecoding newDecoding(){
-    return new PostDecoding(handlers);
+  _PostDecoding _newDecoding(){
+    return new _PostDecoding(handlers);
   }
   
   register(String tag, ReadHandler handler){
@@ -14,7 +14,7 @@ class PostDecoder extends Converter{
   }
   
   convert(obj){
-    return newDecoding().decodeTop(obj);
+    return _newDecoding().decodeTop(obj);
   }
   
   Sink startChunkedConversion(Sink s) {
