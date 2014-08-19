@@ -8,7 +8,7 @@ class MsgPackEncoder extends Converter<dynamic, List<int>>{
   }
 }
 
-class MsgPackDecoder extends Converter<dynamic, List<int>>{
+class MsgPackDecoder extends Converter<List<int>, dynamic>{
   
   convert(List<int> list){
     Uint8List data = new Uint8List.fromList(list);
