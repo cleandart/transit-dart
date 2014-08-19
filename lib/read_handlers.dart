@@ -1,5 +1,8 @@
 part of transit;
 
+/**
+ * Type of ReadHandlers - unary function.
+ */
 typedef T ReadHandler<T>(dynamic);
 
 final Map<String, ReadHandler> _standardReadHandlers = {

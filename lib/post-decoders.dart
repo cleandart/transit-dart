@@ -1,7 +1,15 @@
 part of transit;
 
+/**
+ * Converts deserialized data to the regular Dart object
+ * using Transit read logic
+ */
 class PostDecoder extends Converter{
   
+  /**
+   * Used to map tags to their [ReadHandlers]
+   * during decoding.
+   */
   final Map<String, ReadHandler> handlers =
       new Map.from(_standardReadHandlers);
   
@@ -9,6 +17,10 @@ class PostDecoder extends Converter{
     return new _PostDecoding(handlers);
   }
   
+  /**
+   * Registers [handler] to be used for decoding [tag]
+   * by the converter.
+   */
   register(String tag, ReadHandler handler){
     handlers[tag] = handler;
   }

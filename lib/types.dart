@@ -1,5 +1,9 @@
 part of transit;
 
+/**
+ * Decoded Transit tag which wasn't associated
+ * with any value.
+ */
 class TransitTag{
   
   final String tag;
@@ -8,9 +12,23 @@ class TransitTag{
   String toString() => "#${tag}";
 }
 
+/**
+ * Transit tag with its associated value.
+ * 
+ * Used to force tag encoding.
+ * Can be returned from decoding when no ReadHandler
+ * was specified for the given tag.
+ */
 class TransitTaggedValue<T>{
   
+  /**
+   * Tag string
+   */
   final String tag;
+  
+  /**
+   * Tag value
+   */
   final T rep;
   
   const TransitTaggedValue(this.tag, this.rep);
@@ -24,21 +42,34 @@ class TransitTaggedValue<T>{
   int get hashCode => tag.hashCode ^ rep.hashCode;
 }
 
+/**
+ * Representation of Transit Keyword type
+ */
 class TransitKeyword extends TransitTaggedValue<String>{
   
   const TransitKeyword(String key): super(":", key); 
 }
 
+/**
+ * Representation of Transit Symbol type
+ */
 class TransitSymbol extends TransitTaggedValue<String>{
   
   const TransitSymbol(String val): super("\$", val); 
 }
 
+/**
+ * Representation of Transit Bytes type
+ */
 class TransitBytes extends TransitTaggedValue<List<int>>{
   
   const TransitBytes(List<int> data): super("b", data); 
 }
 
+/**
+ * Enumeration of all possible values
+ * for render in Transit Link type
+ */
 class TransitLinkRenderType{
   
   static const LINK = const TransitLinkRenderType._("link");
@@ -56,6 +87,9 @@ class TransitLinkRenderType{
   String toString() => name; 
 }
 
+/**
+ * Representation of Transit Link type
+ */
 class TransitLink{
   Uri href;
   String rel;
@@ -80,13 +114,29 @@ class TransitLink{
     name.hashCode ^ render.hashCode ^ prompt.hashCode;
 }
 
+/**
+ * Representation of Transit Uuid type
+ */
 class TransitUuid{
   
+  /**
+   * Higher 64 for bits of uuid.
+   */
   final int hi;
+  
+  /**
+   * Lower 64 for bits of uuid.
+   */
   final int lo;
   
+  /**
+   * Create Uuid specifing hi64 and lo64.
+   */
   const TransitUuid(this.hi, this.lo);
   
+  /**
+   * Create Uuid from string.
+   */
   factory TransitUuid.parse(String s){
       
       g(int i) => "([a-fA-F0-9]{${i}})";
@@ -112,6 +162,11 @@ class TransitUuid{
   }  
 }
 
+
+/**
+ * Thrown when no [WriteHandler] was found for the object
+ * in the [WriteHandlers].
+ */
 class NotTransitableObjectError extends Error{
   
   final obj;

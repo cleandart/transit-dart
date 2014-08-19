@@ -28,10 +28,18 @@ class _CacheCodingCodec {
   }
 }
 
+/**
+ * Converter which stores cacheable values
+ * and then is able to decode cache codes.
+ */
 class CacheLogicDecoder extends Converter{
   
   List data = [];
   
+  /**
+   * If [s] is cachecode it is decoded.
+   * Otherwise [s] forwarded.
+   */
   String convert(String s){
     if(s[0] == _PREFIX){
       return data[_CACHE_CODING.decode(s)];
@@ -42,12 +50,21 @@ class CacheLogicDecoder extends Converter{
     return s;
   }
 }
-   
+
+/**
+ * Converter which stores cacheable values
+ * and encodes repetitive ones.
+ */
 class CacheLogicEncoder extends Converter{
   
   int counter = 0;
   Map data = {};
   
+  /**
+   * If [s] is cacheable and already was
+   * converted by this converter cache code
+   * is returned. Otherwise [s] is forwarded.
+   */
   String convert(String s){
     if (s.length > 3){
       String res = data[s];

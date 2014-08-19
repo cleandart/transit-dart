@@ -1,15 +1,39 @@
 part of transit;
 
+
+/**
+ * Superclass for custom WriteHandlers, that allows
+ * encoding own types to Transit.
+ * 
+ * The type handler is used for MUST be specified
+ * as a generics parameter. If the type is `dynamic`,
+ * handler matches all objects - behaves like a default.
+ */
 abstract class WriteHandler<T>{
 
   const WriteHandler();
   
+  /**
+   * Returns tag object is encoded with
+   */
   String tag(T obj);
   
+  /**
+   * Returns transit-encodable representation of object
+   */
   rep(T obj);
   
+  /**
+   * Returns string transit representation of object
+   * or `null` if no such representation exists.
+   * Used for map keys with one-char tags.
+   */
   String string_rep(T obj) => null;
   
+  /**
+   * Returns alternative handler which encodes to human
+   * readable form. By default returns `this`.
+   */
   WriteHandler<T> verbose_handler() => this;
   
   bool _handles(obj) => obj is T;
@@ -220,14 +244,37 @@ class _TaggedValueWriteHandler extends WriteHandler<TransitTaggedValue> {
   rep(TransitTaggedValue t) => t.rep;
 }
 
+/**
+ * A collection of [WriteHandler]s. For each type
+ * at most one handler can be registered.
+ * 
+ * Allows to find correct handler for a given object.
+ */
 class WriteHandlers extends Object {
   
+  /**
+   * Registered handlers
+   */
   final Map<Type, WriteHandler> data;
   
+  /**
+   * Register new handler. Replaces old one
+   * of the same type.
+   */
   void register(WriteHandler h){
     data[h._type()] = h;
   }
   
+  /**
+   * Finds handler for [o].
+   * 
+   * If [o] has same type as one of the registered handlers,
+   * this handler is returned. Otherwise, first registered
+   * handler covering the supertype of [o] is used.
+   * 
+   * Throws [NotTransitableObjectError] if no suitable
+   * handler was found.
+   */
   WriteHandler resolve(Object o){
     WriteHandler h;
     
@@ -242,12 +289,21 @@ class WriteHandlers extends Object {
     throw new NotTransitableObjectError(o);
   }
   
+  /**
+   * Creates empty WriteHandlers
+   */
   WriteHandlers(): data = {};
   
+  /**
+   * Creates default WriteHandlers for JSON
+   */
   WriteHandlers.built_in_json(): data = new Map.from(_BUILTINS){
     data.addAll(_BUILTINS_JSON);
   }
-      
+  
+  /**
+   * Creates default WriteHandlers for MsgPack
+   */
   WriteHandlers.built_in_msgPack(): data = new Map.from(_BUILTINS){
     data.addAll(_BUILTINS_MSGPACK);
   }
