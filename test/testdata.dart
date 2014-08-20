@@ -25,9 +25,9 @@ final DATA = [
   [new Set.from([1,2]), ['~#set', [1,2]], ['~#set', [1,2]], {'~#set': [1,2]}],
   [new Queue(), ['~#list', []], ['~#list', []], {'~#list': []}],
   [new TransitTaggedValue("tg",2), ['~#tg', 2], ['~#tg', 2], {'~#tg': 2}],
-  [new TransitTaggedValue("map",{true:0}), {true:0}, ["^ ",true ,0], {"~?t":0}],
-  [new TransitTaggedValue("map",{null:0}), {null:0}, ["^ ",null,0], {"~_":0}],
-  [new TransitTaggedValue("map",{1:0}), {1:0}, ["^ ",1,0], {"~i1":0}],
+  [new TransitTaggedValue("map",{true:0}), {true:0}, ["^ ","~?t" ,0], {"~?t":0}],
+  [new TransitTaggedValue("map",{null:0}), {null:0}, ["^ ","~_" ,0], {"~_":0}],
+  [new TransitTaggedValue("map",{1:0}), {1:0}, ["^ ","~i1",0], {"~i1":0}],
   [
    [new TransitUuid.parse("01234567-89ab-cdef-0123-456789abcdef")],
    [["~#u", [81985529216486895, 81985529216486895]]],
