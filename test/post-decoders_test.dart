@@ -35,5 +35,14 @@ testDecoding() => group("Decoding", () {
       );
     });
   }});
+
+  test("recursive-AsMapKey", () {
+    expect(
+        DECODER.convert(
+          ["^ ", ["~#'", "cached"], 0, "~\$Explain", "^0"]
+        ).toString(),
+        equals({"cached":0, new TransitSymbol("Explain"):"cached"}.toString())
+    );
+  });
     
 });

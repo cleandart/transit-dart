@@ -12,13 +12,13 @@ class _PostDecoding{
   }
   
   decode(obj, bool asMapKey){
-    if (obj is List) return decodeList(obj);
-    if (obj is Map) return decodeMap(obj);
+    if (obj is List) return decodeList(obj, asMapKey);
+    if (obj is Map) return decodeMap(obj, asMapKey);
     if (obj is String) return decodeString(obj, asMapKey);
     return obj;
   }
   
-  decodeList(List l){
+  decodeList(List l, bool asMapKey){
     
     if(l.length == 0)
       return [];
@@ -27,12 +27,12 @@ class _PostDecoding{
       Map result = {};
       int d = (l.length - 1) ~/ 2;
       for(int i = 0; i < d; i++){
-        result[decode(l[2*i+1], true)] = decode(l[2*i+2], false);
+        result[decode(l[2*i+1], true)] = decode(l[2*i+2], asMapKey);
       }
       return result;
     }
     
-    List res = new List.from(l.map((obj)=>decode(obj, false)));
+    List res = new List.from(l.map((obj)=>decode(obj, asMapKey)));
     
     if(res.length == 2 && res[0] is TransitTag)
       return decodeTagged(res[1], res[0].tag);
@@ -41,14 +41,14 @@ class _PostDecoding{
     
   }
     
-  decodeMap(Map m){
+  decodeMap(Map m, bool asMapKey){
     
     if(m.length == 0)
       return {};
     
     Map res = {};
     m.forEach((key, value){
-      res[decode(key, true)] = decode(value, false);
+      res[decode(key, true)] = decode(value, asMapKey);
     });
     
     var k = res.keys.first;

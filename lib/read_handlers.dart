@@ -12,7 +12,7 @@ final Map<String, ReadHandler> _standardReadHandlers = {
   "?": (o){
       if(o is bool) return o;
       if(o == "t") return true;
-      if(o == "f") return true;
+      if(o == "f") return false;
       return null;
   },
   
