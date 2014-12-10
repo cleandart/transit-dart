@@ -5,7 +5,7 @@ transit-dart
 [Transit](http://transit-format.org) format.
 
 Before reading this you should be familiar with the
-Transit format ([http://transit-format.org]())
+Transit format (<http://transit-format.org>)
 
 Usage
 -----
